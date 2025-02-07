@@ -22,6 +22,13 @@ class Invoice extends Model
     public const PAID = 'paid';
     public const PAST_DUE = 'past-due';
 
+    public const STATUS = [
+        self::DRAFT,
+        self::OUTSTANDING,
+        self::PAID,
+        self::PAST_DUE,
+    ];
+
     protected function amountWithCurrency(): Attribute
     {
         return Attribute::make(

@@ -33,7 +33,7 @@
                 class="h-min pb-1 text-sm active:border-b-[#586CCE] active:text-[#586CCE] font-medium hover:font-medium" 
                 type="button" 
                 role="tab" 
-                aria-controls="tabpanelAllInvoice" >
+                aria-controls="tabpanel_all_invoice" data-action="get_status" data-invoice-status="all_invoice">
                     All Invoices
                 </button>
                 
@@ -43,7 +43,7 @@
                 x-bind:class="selectedTab === 'draft' ? 'active font-medium text-[#586CCE] border-b-2 border-[#586CCE] dark:border-white dark:text-white' : 'text-neutral-600 font-medium dark:text-neutral-300 dark:hover:border-b-neutral-300 dark:hover:text-white hover:border-b-2 hover:border-b-[#586CCE] hover:text-[#586CCE]'" 
                 class="h-min pb-1 text-sm active:border-b-[#586CCE] active:text-[#586CCE] font-medium hover:font-medium" 
                 type="button" role="tab"
-                 aria-controls="tabpanelDraft" >
+                 aria-controls="tabpanel_draft" data-action="get_status" data-invoice-status="draft">
                     Draft
                 </button>
     
@@ -53,18 +53,18 @@
                 x-bind:class="selectedTab === 'outstanding' ? 'active font-medium text-[#586CCE] border-b-2 border-[#586CCE] dark:border-white dark:text-white' : 'text-neutral-600 font-medium dark:text-neutral-300 dark:hover:border-b-neutral-300 dark:hover:text-white hover:border-b-2 hover:border-b-[#586CCE] hover:text-[#586CCE]'" 
                 class="h-min pb-1 text-sm active:border-b-[#586CCE] active:text-[#586CCE] font-medium hover:font-medium" 
                 type="button" role="tab" 
-                aria-controls="tabpanelOutstanding">
+                aria-controls="tabpanel_outstanding" data-action="get_status" data-invoice-status="outstanding">
                     Outstanding
                 </button>
     
-                <button x-on:click="selectedTab = 'past_due'" 
-                x-bind:aria-selected="selectedTab === 'past_due'" 
-                x-bind:tabindex="selectedTab === 'past_due' ? '0' : '-1'" 
-                x-bind:class="selectedTab === 'past_due' ? 'active font-medium text-[#586CCE] border-b-2 border-[#586CCE] dark:border-white dark:text-white' : 'text-neutral-600 font-medium dark:text-neutral-300 dark:hover:border-b-neutral-300 dark:hover:text-white hover:border-b-2 hover:border-b-[#586CCE] hover:text-[#586CCE]'" 
+                <button x-on:click="selectedTab = 'past-due'" 
+                x-bind:aria-selected="selectedTab === 'past-due'" 
+                x-bind:tabindex="selectedTab === 'past-due' ? '0' : '-1'" 
+                x-bind:class="selectedTab === 'past-due' ? 'active font-medium text-[#586CCE] border-b-2 border-[#586CCE] dark:border-white dark:text-white' : 'text-neutral-600 font-medium dark:text-neutral-300 dark:hover:border-b-neutral-300 dark:hover:text-white hover:border-b-2 hover:border-b-[#586CCE] hover:text-[#586CCE]'" 
                 class="h-min pb-1 text-sm active:border-b-[#586CCE] active:text-[#586CCE] font-medium hover:font-medium" 
                 type="button" 
                 role="tab" 
-                aria-controls="tabpanelPastdue" >
+                aria-controls="tabpanel_past-due" data-action="get_status" data-invoice-status="past-due">
                     Past due
                 </button>
     
@@ -75,13 +75,13 @@
                 class="h-min pb-1 text-sm active:border-b-[#586CCE] active:text-[#586CCE] font-medium hover:font-medium" 
                 type="button" 
                 role="tab" 
-                aria-controls="tabpanelPaid">
+                aria-controls="tabpanel_paid" data-action="get_status" data-invoice-status="paid">
                     Paid
                 </button>
     
             </div>
             <div class="text-neutral-600 dark:text-neutral-300 h-[calc(100vh-164px)] xl:h-[calc(100vh-187px)] 2xl:h-[calc(100vh-242px)] overflow-y-auto mt-4 [&::-webkit-scrollbar]:w-0">
-                <div x-cloak x-show="selectedTab === 'all_invoice'" id="tabpanelAllInvoice" role="tabpanel" aria-label="all_invoice">
+                <div x-cloak x-show="selectedTab === '{{$status}}'" id="tabpanel_{{$status}}" role="tabpanel" aria-label="{{$status}}">
                     <table class="w-full overflow-x-scroll lg:overflow-auto">
                         <thead>
                             <tr class="">
@@ -95,246 +95,6 @@
                         </thead>
                         <tbody>
                             @foreach ($invoices as $invoice)
-                                <tr class="hover:bg-[#f5f6f8]" x-data="{ status: '{{ $invoice->status }}' }">
-                                    <td class="text-left items-center text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">
-                                        <div class="flex items-start lg:items-center flex-col lg:flex-row gap-1 lg:gap-3">
-                                            <div class="flex items-center text-[12px] md:text-xs gap-1.5 lg:gap-3"> {{ $invoice->amount_with_currency }}
-                                                <span>
-                                                    <svg aria-hidden="true" width="14" height="14" class="h-3 w-3" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="⚙ as4o as4p as4q asal as7r as5j as5k ⚙1kve79q">
-                                                        <path d="M8 1a.75.75 0 1 0 0 1.5c1.757 0 3.474.883 4.547 2.47.817 1.212.997 2.864.608 4.482-.287 1.192-.868 2.304-1.655 3.141V10.25a.75.75 0 0 0-1.5 0v4c0 .414.336.75.75.75h3.75a.75.75 0 0 0 0-1.5h-1.796c.93-1.034 1.584-2.343 1.91-3.697.46-1.912.288-4.024-.824-5.672C12.443 2.137 10.263 1 8 1ZM4 5.75a.75.75 0 0 0 1.5 0v-4A.75.75 0 0 0 4.75 1H1a.75.75 0 0 0 0 1.5h1.796c-.93 1.034-1.584 2.343-1.91 3.697-.46 1.912-.288 4.024.824 5.673C3.057 13.863 5.237 15 7.5 15a.75.75 0 0 0 0-1.5c-1.757 0-3.474-.883-4.547-2.47-.817-1.212-.997-2.864-.608-4.482.287-1.192.868-2.304 1.655-3.141V5.75Z"></path>
-                                                    </svg>
-                                                </span>
-                                            </div>
-                                            
-                                            <span x-show="status === 'draft'" class="bg-gray-100 text-gray-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-gray-700 dark:text-gray-300 inline-block lg:mt-0">Draft</span>
-                                            <span x-show="status === 'outstanding'" class="bg-red-100 text-red-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-red-900 dark:text-red-300 inline-block lg:mt-0">Outstanding</span>
-                                            <span x-show="status === 'paid'" class="bg-green-100 text-green-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-green-900 dark:text-green-300 inline-block lg:mt-0">Paid</span>
-                                            <span x-show="status === 'past-due'" class="bg-yellow-100 text-yellow-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-yellow-900 dark:text-yellow-300 inline-block lg:mt-0">Past-due</span>
-                                        </div>
-                                        
-                                    </td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ $invoice->invoice_number }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ $invoice->users->email }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ $invoice->due_date ?? '--' }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ dateFormate($invoice->created_at) }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2 relative">
-                                        <div x-data="{ open: false }" class="flex justify-center items-center text-left">
-                                            <button @click="open = !open" class="text-2xl text-gray-700 -mt-3">
-                                                ...
-                                            </button>
-                                            <div x-show="open" @click.away="open = false" x-cloak 
-                                                class="absolute right-0 mt-2 bg-white border border-gray-300 rounded shadow-md w-48 z-10">
-                                                <a href="#" data-action="mark_as_paid" data-invoice-id="{{ $invoice->id }}" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                                    Mark as Paid
-                                                </a>                                                
-                                                <a href="#" data-action="mark_as_draft" data-invoice-id="{{ $invoice->id }}" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                                    Mark as Draft
-                                                </a>
-                                                <a href="#" data-action="delete_row" data-invoice-id="{{ $invoice->id }}" class="block w-full text-left px-4 py-2 text-red-700 hover:bg-gray-100">
-                                                    Delete Invoice
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <div x-cloak x-show="selectedTab === 'draft'" id="tabpanelDraft" role="tabpanel" aria-label="draft">
-                    <table class="w-full overflow-x-scroll lg:overflow-auto">
-                        <thead>
-                            <tr class="">
-                                <th class="w-full xl:w-[18%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Amount</th>
-                                <th class="xl:w-[12%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Invoice Number</th>
-                                <th class="xl:w-[43%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Customer</th>
-                                <th class="xl:w-[5%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Due</th>
-                                <th class="xl:w-[12%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Created</th>
-                                <th class="xl:w-[10%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($draftInvoices as $invoice)
-                                <tr class="hover:bg-[#f5f6f8]" x-data="{ status: '{{ $invoice->status }}' }">
-                                    <td class="text-left items-center text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">
-                                        <div class="flex items-start lg:items-center flex-col lg:flex-row gap-1 lg:gap-3">
-                                            <div class="flex items-center text-[12px] md:text-xs gap-1.5 lg:gap-3"> {{ $invoice->amount_with_currency }}
-                                                <span>
-                                                    <svg aria-hidden="true" width="14" height="14" class="h-3 w-3" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="⚙ as4o as4p as4q asal as7r as5j as5k ⚙1kve79q">
-                                                        <path d="M8 1a.75.75 0 1 0 0 1.5c1.757 0 3.474.883 4.547 2.47.817 1.212.997 2.864.608 4.482-.287 1.192-.868 2.304-1.655 3.141V10.25a.75.75 0 0 0-1.5 0v4c0 .414.336.75.75.75h3.75a.75.75 0 0 0 0-1.5h-1.796c.93-1.034 1.584-2.343 1.91-3.697.46-1.912.288-4.024-.824-5.672C12.443 2.137 10.263 1 8 1ZM4 5.75a.75.75 0 0 0 1.5 0v-4A.75.75 0 0 0 4.75 1H1a.75.75 0 0 0 0 1.5h1.796c-.93 1.034-1.584 2.343-1.91 3.697-.46 1.912-.288 4.024.824 5.673C3.057 13.863 5.237 15 7.5 15a.75.75 0 0 0 0-1.5c-1.757 0-3.474-.883-4.547-2.47-.817-1.212-.997-2.864-.608-4.482.287-1.192.868-2.304 1.655-3.141V5.75Z"></path>
-                                                    </svg>
-                                                </span>
-                                            </div>
-                                            
-                                            <span x-show="status === 'draft'" class="bg-gray-100 text-gray-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-gray-700 dark:text-gray-300 inline-block lg:mt-0">Draft</span>
-                                            <span x-show="status === 'outstanding'" class="bg-red-100 text-red-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-red-900 dark:text-red-300 inline-block lg:mt-0">Outstanding</span>
-                                            <span x-show="status === 'paid'" class="bg-green-100 text-green-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-green-900 dark:text-green-300 inline-block lg:mt-0">Paid</span>
-                                            <span x-show="status === 'past-due'" class="bg-yellow-100 text-yellow-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-yellow-900 dark:text-yellow-300 inline-block lg:mt-0">Past-due</span>
-                                        </div>
-                                        
-                                    </td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ $invoice->invoice_number }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ $invoice->users->email }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ $invoice->due_date ?? '--' }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ dateFormate($invoice->created_at) }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2 relative">
-                                        <div x-data="{ open: false }" class="flex justify-center items-center text-left">
-                                            <button @click="open = !open" class="text-2xl text-gray-700 -mt-3">
-                                                ...
-                                            </button>
-                                            <div x-show="open" @click.away="open = false" x-cloak 
-                                                class="absolute right-0 mt-2 bg-white border border-gray-300 rounded shadow-md w-48 z-10">
-                                                <a href="#" data-action="mark_as_paid" data-invoice-id="{{ $invoice->id }}" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                                    Mark as Paid
-                                                </a>                                                
-                                                <a href="#" data-action="mark_as_draft" data-invoice-id="{{ $invoice->id }}" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                                    Mark as Draft
-                                                </a>
-                                                <a href="#" data-action="delete_row" data-invoice-id="{{ $invoice->id }}" class="block w-full text-left px-4 py-2 text-red-700 hover:bg-gray-100">
-                                                    Delete Invoice
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <div x-cloak x-show="selectedTab === 'outstanding'" id="tabpanelOutstanding" role="tabpanel" aria-label="outstanding">
-                    <table class="w-full overflow-x-scroll lg:overflow-auto">
-                        <thead>
-                            <tr class="">
-                                <th class="w-full xl:w-[18%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Amount</th>
-                                <th class="xl:w-[12%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Invoice Number</th>
-                                <th class="xl:w-[43%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Customer</th>
-                                <th class="xl:w-[5%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Due</th>
-                                <th class="xl:w-[12%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Created</th>
-                                <th class="xl:w-[10%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($outstandingInvoices as $invoice)
-                                <tr class="hover:bg-[#f5f6f8]" x-data="{ status: '{{ $invoice->status }}' }">
-                                    <td class="text-left items-center text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">
-                                        <div class="flex items-start lg:items-center flex-col lg:flex-row gap-1 lg:gap-3">
-                                            <div class="flex items-center text-[12px] md:text-xs gap-1.5 lg:gap-3"> {{ $invoice->amount_with_currency }}
-                                                <span>
-                                                    <svg aria-hidden="true" width="14" height="14" class="h-3 w-3" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="⚙ as4o as4p as4q asal as7r as5j as5k ⚙1kve79q">
-                                                        <path d="M8 1a.75.75 0 1 0 0 1.5c1.757 0 3.474.883 4.547 2.47.817 1.212.997 2.864.608 4.482-.287 1.192-.868 2.304-1.655 3.141V10.25a.75.75 0 0 0-1.5 0v4c0 .414.336.75.75.75h3.75a.75.75 0 0 0 0-1.5h-1.796c.93-1.034 1.584-2.343 1.91-3.697.46-1.912.288-4.024-.824-5.672C12.443 2.137 10.263 1 8 1ZM4 5.75a.75.75 0 0 0 1.5 0v-4A.75.75 0 0 0 4.75 1H1a.75.75 0 0 0 0 1.5h1.796c-.93 1.034-1.584 2.343-1.91 3.697-.46 1.912-.288 4.024.824 5.673C3.057 13.863 5.237 15 7.5 15a.75.75 0 0 0 0-1.5c-1.757 0-3.474-.883-4.547-2.47-.817-1.212-.997-2.864-.608-4.482.287-1.192.868-2.304 1.655-3.141V5.75Z"></path>
-                                                    </svg>
-                                                </span>
-                                            </div>
-                                            
-                                            <span x-show="status === 'draft'" class="bg-gray-100 text-gray-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-gray-700 dark:text-gray-300 inline-block lg:mt-0">Draft</span>
-                                            <span x-show="status === 'outstanding'" class="bg-red-100 text-red-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-red-900 dark:text-red-300 inline-block lg:mt-0">Outstanding</span>
-                                            <span x-show="status === 'paid'" class="bg-green-100 text-green-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-green-900 dark:text-green-300 inline-block lg:mt-0">Paid</span>
-                                            <span x-show="status === 'past-due'" class="bg-yellow-100 text-yellow-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-yellow-900 dark:text-yellow-300 inline-block lg:mt-0">Past-due</span>
-                                        </div>
-                                        
-                                    </td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ $invoice->invoice_number }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ $invoice->users->email }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ $invoice->due_date ?? '--' }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ dateFormate($invoice->created_at) }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2 relative">
-                                        <div x-data="{ open: false }" class="flex justify-center items-center text-left">
-                                            <button @click="open = !open" class="text-2xl text-gray-700 -mt-3">
-                                                ...
-                                            </button>
-                                            <div x-show="open" @click.away="open = false" x-cloak 
-                                                class="absolute right-0 mt-2 bg-white border border-gray-300 rounded shadow-md w-48 z-10">
-                                                <a href="#" data-action="mark_as_paid" data-invoice-id="{{ $invoice->id }}" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                                    Mark as Paid
-                                                </a>                                                
-                                                <a href="#" data-action="mark_as_draft" data-invoice-id="{{ $invoice->id }}" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                                    Mark as Draft
-                                                </a>
-                                                <a href="#" data-action="delete_row" data-invoice-id="{{ $invoice->id }}" class="block w-full text-left px-4 py-2 text-red-700 hover:bg-gray-100">
-                                                    Delete Invoice
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <div x-cloak x-show="selectedTab === 'past_due'" id="tabpanelPastdue" role="tabpanel" aria-label="past_due">
-                    <table class="w-full overflow-x-scroll lg:overflow-auto">
-                        <thead>
-                            <tr class="">
-                                <th class="w-full xl:w-[18%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Amount</th>
-                                <th class="xl:w-[12%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Invoice Number</th>
-                                <th class="xl:w-[43%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Customer</th>
-                                <th class="xl:w-[5%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Due</th>
-                                <th class="xl:w-[12%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Created</th>
-                                <th class="xl:w-[10%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($pastDueInvoices as $invoice)
-                                <tr class="hover:bg-[#f5f6f8]" x-data="{ status: '{{ $invoice->status }}' }">
-                                    <td class="text-left items-center text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">
-                                        <div class="flex items-start lg:items-center flex-col lg:flex-row gap-1 lg:gap-3">
-                                            <div class="flex items-center text-[12px] md:text-xs gap-1.5 lg:gap-3"> {{ $invoice->amount_with_currency }}
-                                                <span>
-                                                    <svg aria-hidden="true" width="14" height="14" class="h-3 w-3" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" class="⚙ as4o as4p as4q asal as7r as5j as5k ⚙1kve79q">
-                                                        <path d="M8 1a.75.75 0 1 0 0 1.5c1.757 0 3.474.883 4.547 2.47.817 1.212.997 2.864.608 4.482-.287 1.192-.868 2.304-1.655 3.141V10.25a.75.75 0 0 0-1.5 0v4c0 .414.336.75.75.75h3.75a.75.75 0 0 0 0-1.5h-1.796c.93-1.034 1.584-2.343 1.91-3.697.46-1.912.288-4.024-.824-5.672C12.443 2.137 10.263 1 8 1ZM4 5.75a.75.75 0 0 0 1.5 0v-4A.75.75 0 0 0 4.75 1H1a.75.75 0 0 0 0 1.5h1.796c-.93 1.034-1.584 2.343-1.91 3.697-.46 1.912-.288 4.024.824 5.673C3.057 13.863 5.237 15 7.5 15a.75.75 0 0 0 0-1.5c-1.757 0-3.474-.883-4.547-2.47-.817-1.212-.997-2.864-.608-4.482.287-1.192.868-2.304 1.655-3.141V5.75Z"></path>
-                                                    </svg>
-                                                </span>
-                                            </div>
-                                            
-                                            <span x-show="status === 'draft'" class="bg-gray-100 text-gray-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-gray-700 dark:text-gray-300 inline-block lg:mt-0">Draft</span>
-                                            <span x-show="status === 'outstanding'" class="bg-red-100 text-red-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-red-900 dark:text-red-300 inline-block lg:mt-0">Outstanding</span>
-                                            <span x-show="status === 'paid'" class="bg-green-100 text-green-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-green-900 dark:text-green-300 inline-block lg:mt-0">Paid</span>
-                                            <span x-show="status === 'past-due'" class="bg-yellow-100 text-yellow-800 text-xs capitalize font-medium px-1.5 py-0.5 rounded-[4px] dark:bg-yellow-900 dark:text-yellow-300 inline-block lg:mt-0">Past-due</span>
-                                        </div>
-                                        
-                                    </td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ $invoice->invoice_number }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ $invoice->users->email }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ $invoice->due_date ?? '--' }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">{{ dateFormate($invoice->created_at) }}</td>
-                                    <td class="text-left text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2 relative">
-                                        <div x-data="{ open: false }" class="flex justify-center items-center text-left">
-                                            <button @click="open = !open" class="text-2xl text-gray-700 -mt-3">
-                                                ...
-                                            </button>
-                                            <div x-show="open" @click.away="open = false" x-cloak 
-                                                class="absolute right-0 mt-2 bg-white border border-gray-300 rounded shadow-md w-48 z-10">
-                                                <a href="#" data-action="mark_as_paid" data-invoice-id="{{ $invoice->id }}" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                                    Mark as Paid
-                                                </a>                                                
-                                                <a href="#" data-action="mark_as_draft" data-invoice-id="{{ $invoice->id }}" class="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100">
-                                                    Mark as Draft
-                                                </a>
-                                                <a href="#" data-action="delete_row" data-invoice-id="{{ $invoice->id }}" class="block w-full text-left px-4 py-2 text-red-700 hover:bg-gray-100">
-                                                    Delete Invoice
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                </div>
-                <div x-cloak x-show="selectedTab === 'paid'" id="tabpanelPaid" role="tabpanel" aria-label="paid">
-                    <table class="w-full overflow-x-scroll lg:overflow-auto">
-                        <thead>
-                            <tr class="">
-                                <th class="w-full xl:w-[18%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Amount</th>
-                                <th class="xl:w-[12%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Invoice Number</th>
-                                <th class="xl:w-[43%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Customer</th>
-                                <th class="xl:w-[5%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Due</th>
-                                <th class="xl:w-[12%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2">Created</th>
-                                <th class="xl:w-[10%] text-left text-[#353a44] text-sm font-semibold uppercase border-b pl-2 pr-3 py-2"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($paidInvoices as $invoice)
                                 <tr class="hover:bg-[#f5f6f8]" x-data="{ status: '{{ $invoice->status }}' }">
                                     <td class="text-left items-center text-[#353a44] text-sm font-normal uppercase border-b pl-2 pr-2 xl:pr-3 py-2">
                                         <div class="flex items-start lg:items-center flex-col lg:flex-row gap-1 lg:gap-3">
@@ -445,6 +205,13 @@
                         Livewire.dispatch('mark_as_draft', [this.getAttribute('data-invoice-id')]);
                     }
                 });
+            });
+        });
+        
+
+        document.querySelectorAll('[data-action="get_status"]').forEach(function (element) {
+            element.addEventListener('click', function () {
+                Livewire.dispatch('get_status', [this.getAttribute('data-invoice-status')]);
             });
         });
     </script>
